@@ -16,27 +16,26 @@ import webdavClient from 'webdav';
 
 
 export default {
-	async asyncData({params, env}) {
+	async asyncData({params, env, redirect, error}) {
 		const client = webdavClient(env.webdavEndpoint);
 
 		const path = '/' + (params.path || '');
 		let files = [];
-		let exists = true;
 
-		try {
-			files = (await client.getDirectoryContents(path)).map(x => Object.assign(x, {
-				mime: x.type === 'directory' ? 'text/directory' : (x.mime || mime.getType(x.basename) || 'application/octet-stream'),
-				downloadLink: x.type === 'directory' ? '' : client.getFileDownloadLink(x.filename),
-			}));
-		} catch(e) {
-			exists = false;
+		const stat = await client.stat(path);
+		if (stat.type === 'directory') {
+			return {
+				path: path,
+				files: (await client.getDirectoryContents(path)).map(x => Object.assign(x, {
+					mime: x.type === 'directory' ? 'text/directory' : (x.mime || mime.getType(x.basename) || 'application/octet-stream'),
+					downloadLink: x.type === 'directory' ? '' : client.getFileDownloadLink(x.filename),
+				})),
+			};
+		} else if (stat.lastmod === undefined) {
+			error({statusCode: 404, message: 'No such file or directory'});
+		} else {
+			redirect(client.getFileDownloadLink(path));
 		}
-
-		return {
-			path: path,
-			files: files,
-			exists: exists,
-		};
 	},
 };
 </script>
