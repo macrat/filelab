@@ -11,11 +11,17 @@ li {
 
 a {
 	display: block;
+	font-size: 18px;
 	padding: 4px 24px;
 	margin: 6px 1px 0;
-	background-color: #d6d6d6;
-	color: black;
+	background-color: #d0d0d0;
+	color: #404040;
 	text-decoration: none;
+}
+
+img {
+	height: 22px;
+	margin: -4px -8px;
 }
 
 .current {
@@ -26,7 +32,8 @@ a {
 <template>
 	<ul>
 		<li v-for="bread in breadList">
-			<nuxt-link :to=bread.path :class="{current: bread.path === path}">{{ bread.name }}</nuxt-link>
+			<nuxt-link :to=bread.path :class="{current: bread.path === path}" v-if="bread.path === '/'"><img src="~~/node_modules/material-design-icons/action/svg/production/ic_home_24px.svg"></nuxt-link>
+			<nuxt-link :to=bread.path :class="{current: bread.path === path}" v-else>{{ bread.name }}</nuxt-link>
 		</li>
 	</ul>
 </template>

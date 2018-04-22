@@ -5,6 +5,8 @@ a {
 	height: 96px;
 	text-align: center;
 	overflow: hidden;
+	color: #202020;
+	text-decoration: none;
 }
 
 i {

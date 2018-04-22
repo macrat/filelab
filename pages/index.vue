@@ -10,11 +10,6 @@ li {
 	display: block;
 	margin: 8px;
 }
-
-a {
-	color: black;
-	text-decoration: none;
-}
 </style>
 
 <template>
