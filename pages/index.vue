@@ -16,8 +16,8 @@ import webdavClient from 'webdav';
 
 
 export default {
-	async asyncData({params}) {
-		const client = webdavClient('http://localhost:3001');
+	async asyncData({params, env}) {
+		const client = webdavClient(env.webdavEndpoint);
 
 		const path = '/' + (params.path || '');
 		let files = [];
