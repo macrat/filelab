@@ -7,6 +7,16 @@ a {
 	overflow: hidden;
 	color: #202020;
 	text-decoration: none;
+	transition: .2s transform, .2s opacity;
+}
+
+a.dragging {
+	opacity: .8;
+	transform: scale(.8, .8);
+}
+
+a.draghover {
+	transform: scale(1.4, 1.4);
 }
 
 i {
@@ -24,12 +34,30 @@ span {
 </style>
 
 <template>
-	<nuxt-link :to=file.filename v-if="file.type === 'directory'">
+	<nuxt-link
+			v-if="file.type === 'directory'"
+			:to=file.filename
+			:class="{dragging: dragging, draghover: draghover}"
+			draggable=true
+			@dragstart.native=dragstart
+			@dragend.native=dragend
+			@dragleave.native=dragleave
+			@dragover.native.prevent=dragover>
+
 		<i class=material-icons>{{ icon }}</i>
 		<span>{{ file.basename }}</span>
 	</nuxt-link>
 
-	<a :href=file.downloadLink :type=file.mime target=_blank v-else>
+	<a
+			v-else
+			:href=file.downloadLink
+			:type=file.mime
+			target=_blank
+			:class="{dragging: dragging, draghover: draghover}"
+			draggable=true
+			@dragstart=dragstart
+			@dragend=dragend>
+
 		<i class=material-icons>{{ icon }}</i>
 		<span>{{ file.basename }}</span>
 	</a>
@@ -38,6 +66,12 @@ span {
 <script>
 export default {
 	props: ['file'],
+	data() {
+		return {
+			dragging: false,
+			draghover: false,
+		}
+	},
 	computed: {
 		icon() {
 			if (this.file.type === 'directory') {
@@ -50,6 +84,25 @@ export default {
 				['audio', 'music_note'],
 			]);
 			return icons.get(this.file.mime.split('/')[0]) || 'insert_drive_file';
+		},
+	},
+	methods: {
+		dragstart(ev) {
+			this.dragging = true;
+		},
+		dragend(ev) {
+			this.dragging = false;
+		},
+		dragleave(ev) {
+			this.draghover = false;
+		},
+		dragover(ev) {
+			if (!this.dragging) {
+				this.draghover = true;
+			}
+			ev.dataTransfer.dropEffect = 'move';
+
+			return false;
 		},
 	},
 };
