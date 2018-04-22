@@ -1,24 +1,25 @@
 <style scoped>
 ul {
-	display: inline;
+	display: flex;
 	margin: 0;
 	padding: 0;
 }
 
 li {
-	display: inline-block;
+	display: block;
 }
 
 a {
-	padding: 4px 16px;
-	margin: 0 1px;
+	display: block;
+	padding: 4px 24px;
+	margin: 6px 1px 0;
+	background-color: #d6d6d6;
 	color: black;
-	background-color: #e0e0e0;
 	text-decoration: none;
 }
 
-a.current {
-	background-color: #f8f8f8;
+.current {
+	background-color: #fafafa;
 }
 </style>
 

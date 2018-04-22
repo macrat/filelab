@@ -1,6 +1,14 @@
 <style scoped>
+ul {
+	display: flex;
+	margin: 0;
+	padding: 8px;
+	flex-wrap: wrap;
+}
+
 li {
-	margin: 4px 0;
+	display: block;
+	margin: 8px;
 }
 
 a {
@@ -15,8 +23,7 @@ a {
 
 		<ul>
 			<li v-for="file in files">
-				<nuxt-link :to=file.filename v-if="file.type === 'directory'">{{ file.basename }}/</nuxt-link>
-				<a :href=file.downloadLink :type=file.mime target=_blank v-else>{{ file.basename }} ({{ file.mime }})</a>
+				<item-button :file=file />
 			</li>
 		</ul>
 	</div>
@@ -26,11 +33,12 @@ a {
 import mime from 'mime';
 import webdavClient from 'webdav';
 
+import ItemButton from '../components/ItemButton';
 import HeaderBar from '../components/HeaderBar';
 
 
 export default {
-	components: {HeaderBar},
+	components: {ItemButton, HeaderBar},
 	async asyncData({params, env, redirect, error}) {
 		const client = webdavClient(env.webdavEndpoint);
 
