@@ -1,26 +1,7 @@
-<style scoped>
-ul {
-	display: flex;
-	margin: 0;
-	padding: 8px;
-	flex-wrap: wrap;
-}
-
-li {
-	display: block;
-	margin: 8px;
-}
-</style>
-
 <template>
 	<div>
 		<header-bar :path=path />
-
-		<ul>
-			<li v-for="file in files">
-				<item-button :file=file />
-			</li>
-		</ul>
+		<item-list :files=files />
 	</div>
 </template>
 
@@ -28,12 +9,12 @@ li {
 import mime from 'mime';
 import webdavClient from 'webdav';
 
-import ItemButton from '../components/ItemButton';
+import ItemList from '../components/ItemList';
 import HeaderBar from '../components/HeaderBar';
 
 
 export default {
-	components: {ItemButton, HeaderBar},
+	components: {ItemList, HeaderBar},
 	async asyncData({params, env, redirect, error}) {
 		const client = webdavClient(env.webdavEndpoint);
 

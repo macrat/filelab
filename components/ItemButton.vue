@@ -19,8 +19,11 @@ a.draghover {
 	transform: scale(1.4, 1.4);
 }
 
+a.disabled {
+	opacity: .5;
+}
+
 i {
-	display: block;
 	font-size: 52px;
 	margin-bottom: -2px;
 	color: #404040;
@@ -37,7 +40,7 @@ span {
 	<nuxt-link
 			v-if="file.type === 'directory'"
 			:to=file.filename
-			:class="{dragging: dragging, draghover: draghover}"
+			:class="{dragging: dragging, draghover: draghover, disabled: !dragging && disabled}"
 			draggable=true
 			@dragstart.native=dragstart
 			@dragend.native=dragend
@@ -53,7 +56,7 @@ span {
 			:href=file.downloadLink
 			:type=file.mime
 			target=_blank
-			:class="{dragging: dragging, draghover: draghover}"
+			:class="{dragging: dragging, draghover: draghover, disabled: !dragging && disabled}"
 			draggable=true
 			@dragstart=dragstart
 			@dragend=dragend>
@@ -70,6 +73,7 @@ export default {
 		return {
 			dragging: false,
 			draghover: false,
+			disabled: false,
 		}
 	},
 	computed: {
@@ -85,13 +89,22 @@ export default {
 			]);
 			return icons.get(this.file.mime.split('/')[0]) || 'insert_drive_file';
 		},
+		droppable() {
+			return this.file.type === 'directory';
+		},
 	},
 	methods: {
 		dragstart(ev) {
 			this.dragging = true;
+
+			ev.dataTransfer.setDragImage(this.$el.getElementsByTagName('i')[0], 0, 0);
+
+			this.$emit('dragstart', ev, this);
 		},
 		dragend(ev) {
 			this.dragging = false;
+
+			this.$emit('dragend', ev, this);
 		},
 		dragleave(ev) {
 			this.draghover = false;

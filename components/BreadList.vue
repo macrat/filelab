@@ -34,8 +34,8 @@ img {
 <template>
 	<ul>
 		<li v-for="bread in breadList">
-			<nuxt-link :to=bread.path :class="{current: bread.path === path}" v-if="bread.path === '/'"><img src="~~/node_modules/material-design-icons/action/svg/production/ic_home_24px.svg"></nuxt-link>
-			<nuxt-link :to=bread.path :class="{current: bread.path === path}" v-else>{{ bread.name }}</nuxt-link>
+			<nuxt-link :to=bread.path :class="{current: bread.path === path}" draggable=false v-if="bread.path === '/'"><img src="~~/node_modules/material-design-icons/action/svg/production/ic_home_24px.svg" draggable=false></nuxt-link>
+			<nuxt-link :to=bread.path :class="{current: bread.path === path}" draggable=false v-else>{{ bread.name }}</nuxt-link>
 		</li>
 	</ul>
 </template>
