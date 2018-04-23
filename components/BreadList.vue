@@ -1,12 +1,14 @@
 <style scoped>
 ul {
-	display: flex;
+	display: block;
 	margin: 0;
-	padding: 0;
+	padding: 0 4px;
+	white-space: nowrap;
+	overflow: hidden;
 }
 
 li {
-	display: block;
+	display: inline-block;
 }
 
 a {

@@ -1,7 +1,6 @@
 <style scoped>
 header {
 	background-color: #404040;
-	padding: 0 4px;
 }
 </style>
 
