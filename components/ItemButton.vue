@@ -23,11 +23,18 @@ a.disabled {
 	opacity: .5;
 }
 
-img {
+.icon {
 	width: 52px;
 	height: 52px;
 	margin-bottom: -2px;
 	opacity: .75;
+}
+
+.thumbnail {
+	width: auto;
+	max-width: 96px;
+	height: 52px;
+	margin-bottom: -2px;
 }
 
 span {
@@ -48,7 +55,7 @@ span {
 			@dragleave.native=dragleave
 			@dragover.native.prevent=dragover>
 
-		<img :src=icon />
+		<img class=icon :src=icon />
 		<span>{{ file.basename }}</span>
 	</nuxt-link>
 
@@ -62,8 +69,8 @@ span {
 			@dragstart=dragstart
 			@dragend=dragend>
 
-		<img :src=icon v-if=!thumbnailLoaded />
-		<img :src=thumbnailURL v-show=thumbnailLoaded @load="thumbnailLoaded = true" />
+		<img class=icon :src=icon v-if=!thumbnailLoaded />
+		<img class=thumbnail :src=thumbnailURL v-show=thumbnailLoaded @load="thumbnailLoaded = true" />
 		<span>{{ file.basename }}</span>
 	</a>
 </template>
