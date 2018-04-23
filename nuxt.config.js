@@ -13,7 +13,4 @@ module.exports = {
 			content: 'width=device-width,initial-scale=1',
 		}],
 	},
-	css: [
-		'node_modules/material-design-icons/iconfont/material-icons.css',
-	],
 }

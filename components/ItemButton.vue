@@ -23,10 +23,11 @@ a.disabled {
 	opacity: .5;
 }
 
-i {
-	font-size: 52px;
+img {
+	width: 52px;
+	height: 52px;
 	margin-bottom: -2px;
-	color: #404040;
+	opacity: .75;
 }
 
 span {
@@ -47,7 +48,7 @@ span {
 			@dragleave.native=dragleave
 			@dragover.native.prevent=dragover>
 
-		<i class=material-icons>{{ icon }}</i>
+		<img :src=icon />
 		<span>{{ file.basename }}</span>
 	</nuxt-link>
 
@@ -61,7 +62,8 @@ span {
 			@dragstart=dragstart
 			@dragend=dragend>
 
-		<i class=material-icons>{{ icon }}</i>
+		<img :src=icon v-if=!thumbnailLoaded />
+		<img :src=thumbnailURL v-show=thumbnailLoaded @load="thumbnailLoaded = true" />
 		<span>{{ file.basename }}</span>
 	</a>
 </template>
@@ -74,20 +76,29 @@ export default {
 			dragging: false,
 			draghover: false,
 			disabled: false,
+			thumbnailLoaded: false,
 		}
 	},
 	computed: {
 		icon() {
 			if (this.file.type === 'directory') {
-				return 'folder';
+				return require('material-design-icons/file/svg/production/ic_folder_48px.svg');
 			}
 
 			const icons = new Map([
-				['image', 'image'],
-				['video', 'movie'],
-				['audio', 'music_note'],
+				['image', require('material-design-icons/image/svg/production/ic_image_48px.svg')],
+				['video', require('material-design-icons/av/svg/production/ic_movie_48px.svg')],
+				['audio', require('material-design-icons/image/svg/production/ic_music_note_48px.svg')],
 			]);
-			return icons.get(this.file.mime.split('/')[0]) || 'insert_drive_file';
+			const anotherFile = require('material-design-icons/editor/svg/production/ic_insert_drive_file_48px.svg');
+			return icons.get(this.file.mime.split('/')[0]) || anotherFile;
+		},
+		thumbnailURL() {
+			if (this.file.mime.startsWith('image/')) {
+				return this.file.downloadLink;
+			} else {
+				return null;
+			}
 		},
 		droppable() {
 			return this.file.type === 'directory';
@@ -97,7 +108,7 @@ export default {
 		dragstart(ev) {
 			this.dragging = true;
 
-			ev.dataTransfer.setDragImage(this.$el.getElementsByTagName('i')[0], 0, 0);
+			ev.dataTransfer.setDragImage(this.$el.getElementsByTagName('img')[0], 0, 0);
 
 			this.$emit('dragstart', ev, this);
 		},
