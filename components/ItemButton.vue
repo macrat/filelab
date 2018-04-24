@@ -77,12 +77,11 @@ span {
 
 <script>
 export default {
-	props: ['file'],
+	props: ['file', 'disabled'],
 	data() {
 		return {
 			dragging: false,
 			draghover: false,
-			disabled: false,
 			thumbnailLoaded: false,
 		}
 	},

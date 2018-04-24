@@ -15,7 +15,11 @@ li {
 <template>
 	<ul>
 		<li v-for="file in files">
-			<item-button :file=file @dragstart=dragstart @dragend=dragend />
+			<item-button
+				:file=file
+				:disabled="file.type !== 'directory' && dragging"
+				@dragstart="dragging = true"
+				@dragend="dragging = false" />
 		</li>
 	</ul>
 </template>
@@ -27,21 +31,18 @@ import ItemButton from '../components/ItemButton';
 export default {
 	props: ['files'],
 	components: {ItemButton},
-	methods: {
-		dragstart(ev, target) {
-			this.$children.forEach(x => {
-				if (!x.droppable) {
-					x.disabled = true;
-				}
-			});
-		},
-		dragend(ev, target) {
-			this.$children.forEach(x => {
-				if (x.dragleave) {
-					x.dragleave();
-				}
-				x.disabled = false;
-			});
+	data() {
+		return {dragging: false};
+	},
+	watch: {
+		dragging(value) {
+			if (!value) {
+				this.$children.forEach(x => {
+					if (x.dragleave) {
+						x.dragleave();
+					}
+				});
+			}
 		},
 	},
 }
