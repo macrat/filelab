@@ -4,6 +4,7 @@ ul {
 	margin: 0;
 	padding: 8px;
 	flex-wrap: wrap;
+	align-content: flex-start;
 }
 
 li {
@@ -13,7 +14,7 @@ li {
 </style>
 
 <template>
-	<ul>
+	<ul @dragover.prevent=dragover @drop.prevent=drop>
 		<li v-for="file in files">
 			<item-button
 				:file=file
@@ -42,6 +43,27 @@ export default {
 						x.dragleave();
 					}
 				});
+			}
+		},
+	},
+	methods: {
+		dragover(ev) {
+			ev.dataTransfer.dropEffect = 'move';
+
+			return false;
+		},
+		drop(ev) {
+			const {files} = ev.dataTransfer;
+			if (files.length > 0) {
+				for (let i=0; i<files.length; i++) {
+					const reader = new FileReader();
+					reader.onload = data => {
+						this.$emit('upload', files[i], data.target.result);
+					};
+					reader.readAsArrayBuffer(files[i]);
+				}
+
+				return false;
 			}
 		},
 	},

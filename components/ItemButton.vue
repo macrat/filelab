@@ -53,7 +53,8 @@ span {
 			@dragstart.native=dragstart
 			@dragend.native=dragend
 			@dragleave.native=dragleave
-			@dragover.native.prevent=dragover>
+			@dragover.native.prevent=dragover
+			@drop.native.prevent=drop>
 
 		<img class=icon :src=icon />
 		<span>{{ file.basename }}</span>
@@ -114,6 +115,9 @@ export default {
 		dragstart(ev) {
 			this.dragging = true;
 
+			ev.dataTransfer.setData('DownloadURL', this.file.DownloadLink);
+			ev.dataTransfer.setData('text/uri-list', this.file.DownloadLink);
+
 			ev.dataTransfer.setDragImage(this.$el.getElementsByTagName('img')[0], 0, 0);
 
 			this.$emit('dragstart', ev, this);
@@ -132,6 +136,9 @@ export default {
 			}
 			ev.dataTransfer.dropEffect = 'move';
 
+			return false;
+		},
+		drop(ev) {
 			return false;
 		},
 	},
