@@ -49,6 +49,7 @@ span {
 			v-if="file.type === 'directory'"
 			:to=file.filename
 			:class="{dragging: dragging, draghover: draghover, disabled: !dragging && disabled}"
+			:data-file="JSON.stringify(file)"
 			draggable=true
 			@dragstart.native=dragstart
 			@dragend.native=dragend
@@ -66,6 +67,7 @@ span {
 			:type=file.mime
 			target=_blank
 			:class="{dragging: dragging, draghover: draghover, disabled: !dragging && disabled}"
+			:data-file="JSON.stringify(file)"
 			draggable=true
 			@dragstart=dragstart
 			@dragend=dragend>

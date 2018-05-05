@@ -19,8 +19,8 @@ li {
 			<item-button
 				:file=file
 				:disabled="file.type !== 'directory' && dragging"
-				@dragstart="dragging = true"
-				@dragend="dragging = false" />
+				@dragstart=dragstart
+				@dragend="dragging = null" />
 		</li>
 	</ul>
 </template>
@@ -33,7 +33,7 @@ export default {
 	props: ['files'],
 	components: {ItemButton},
 	data() {
-		return {dragging: false};
+		return {dragging: null};
 	},
 	watch: {
 		dragging(value) {
@@ -52,8 +52,12 @@ export default {
 
 			return false;
 		},
+		dragstart(ev, item) {
+			this.dragging = item.file;
+		},
 		drop(ev) {
 			const {files} = ev.dataTransfer;
+
 			if (files.length > 0) {
 				for (let i=0; i<files.length; i++) {
 					const reader = new FileReader();
@@ -64,6 +68,11 @@ export default {
 				}
 
 				return false;
+			}
+
+			const file = ev.target && ev.target.dataset.file || ev.target.parentElement && ev.target.parentElement.dataset.file;
+			if (file) {
+				this.$emit('move', this.dragging, JSON.parse(file));
 			}
 		},
 	},

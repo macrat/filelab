@@ -16,7 +16,8 @@ div {
 		<item-list
 			id=itemlist
 			:files=files
-			@upload=upload />
+			@upload=upload
+			@move=move />
 	</div>
 </template>
 
@@ -79,6 +80,10 @@ export default {
 	methods: {
 		upload(file, data) {
 			this.client.putFileContents(path.join(this.path, file.name), data, {format: 'binary'})
+				.then(() => this.reload());
+		},
+		move(file, target) {
+			this.client.moveFile(file.filename, path.join(target.filename, file.basename))
 				.then(() => this.reload());
 		},
 		async reload() {
