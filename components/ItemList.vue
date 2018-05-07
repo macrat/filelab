@@ -56,23 +56,25 @@ export default {
 			this.dragging = item.file;
 		},
 		drop(ev) {
+			const target = JSON.parse(ev.target && ev.target.dataset.file || ev.target.parentElement && ev.target.parentElement.dataset.file || 'null');
 			const {files} = ev.dataTransfer;
 
 			if (files.length > 0) {
 				for (let i=0; i<files.length; i++) {
 					const reader = new FileReader();
 					reader.onload = data => {
-						this.$emit('upload', files[i], data.target.result);
+						this.$emit('upload', files[i], data.target.result, target);
 					};
 					reader.readAsArrayBuffer(files[i]);
 				}
 
+				this.dragging = null;
 				return false;
 			}
 
-			const file = ev.target && ev.target.dataset.file || ev.target.parentElement && ev.target.parentElement.dataset.file;
-			if (file) {
-				this.$emit('move', this.dragging, JSON.parse(file));
+			if (target) {
+				this.$emit('move', this.dragging, target);
+				this.dragging = null;
 				return false;
 			}
 		},

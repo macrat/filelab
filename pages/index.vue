@@ -82,8 +82,9 @@ export default {
 		},
 	},
 	methods: {
-		upload(file, data) {
-			this.client.putFileContents(path.join(this.path, file.name), data, {format: 'binary'})
+		upload(file, data, target) {
+			const filename = path.join(target ? target.filename : this.path, file.name);
+			this.client.putFileContents(filename, data, {format: 'binary'})
 				.then(() => this.reload());
 		},
 		move(file, target) {
