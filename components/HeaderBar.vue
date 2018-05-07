@@ -6,7 +6,7 @@ header {
 
 <template>
 	<header>
-		<bread-list :path=path />
+		<bread-list :path=path @move-to-parent="x => $emit('move-to-parent', x)" />
 	</header>
 </template>
 

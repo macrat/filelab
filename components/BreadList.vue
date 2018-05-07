@@ -34,8 +34,20 @@ img {
 <template>
 	<ul>
 		<li v-for="bread in breadList">
-			<nuxt-link :to=bread.path :class="{current: bread.path === path}" draggable=false v-if="bread.path === '/'"><img src="~~/node_modules/material-design-icons/action/svg/production/ic_home_24px.svg" draggable=false></nuxt-link>
-			<nuxt-link :to=bread.path :class="{current: bread.path === path}" draggable=false v-else>{{ bread.name }}</nuxt-link>
+			<nuxt-link
+				:to=bread.path
+				:class="{current: bread.path === path}"
+				@dragover.native.prevent="dragover($event, bread)"
+				@drop.native.prevent="drop($event, bread)"
+				draggable=false>
+
+				<img
+					src="~~/node_modules/material-design-icons/action/svg/production/ic_home_24px.svg"
+					draggable=false
+					v-if="bread.path === '/'">
+
+				<span v-else>{{ bread.name }}</span>
+			</nuxt-link>
 		</li>
 	</ul>
 </template>
@@ -61,6 +73,25 @@ export default {
 			result[0].path = '/';
 
 			return result;
+		},
+	},
+	methods: {
+		dragover(ev, dir) {
+			if (this.path !== dir.path) {
+				ev.dataTransfer.dropEffect = 'move';
+
+				return false;
+			} else {
+				ev.dataTransfer.dropEffect = 'none';
+
+				return true;
+			}
+		},
+		drop(ev, dir) {
+			if (this.path !== dir.path) {
+				this.$emit('move-to-parent', dir);
+				return false;
+			}
 		},
 	},
 };

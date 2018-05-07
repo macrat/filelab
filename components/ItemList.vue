@@ -73,6 +73,7 @@ export default {
 			const file = ev.target && ev.target.dataset.file || ev.target.parentElement && ev.target.parentElement.dataset.file;
 			if (file) {
 				this.$emit('move', this.dragging, JSON.parse(file));
+				return false;
 			}
 		},
 	},

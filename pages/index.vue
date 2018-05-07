@@ -12,9 +12,13 @@ div {
 
 <template>
 	<div>
-		<header-bar :path=path />
+		<header-bar
+			:path=path
+			@move-to-parent=moveToParent />
+
 		<item-list
 			id=itemlist
+			ref=itemlist
 			:files=files
 			@upload=upload
 			@move=move />
@@ -85,6 +89,13 @@ export default {
 		move(file, target) {
 			this.client.moveFile(file.filename, path.join(target.filename, file.basename))
 				.then(() => this.reload());
+		},
+		moveToParent(target) {
+			const file = this.$refs.itemlist.dragging;
+			if (file) {
+				this.client.moveFile(file.filename, path.join(target.path, file.basename))
+					.then(() => this.reload());
+			}
 		},
 		async reload() {
 			this.files = await loadFiles(this.client, this.path);
