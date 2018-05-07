@@ -73,7 +73,9 @@ export default {
 			}
 
 			if (target) {
-				this.$emit('move', this.dragging, target);
+				if (this.dragging.filename !== target.filename) {
+					this.$emit('move', this.dragging, target);
+				}
 				this.dragging = null;
 				return false;
 			}
