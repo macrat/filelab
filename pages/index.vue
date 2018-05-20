@@ -13,62 +13,37 @@ div {
 <template>
 	<div>
 		<header-bar
-			:path=path
+			:path=$store.state.path
 			@move-to-parent=moveToParent />
 
 		<item-list
 			id=itemlist
 			ref=itemlist
-			:files=files
+			:files=$store.state.files
 			@upload=upload
 			@move=move />
 	</div>
 </template>
 
 <script>
-import mime from 'mime';
 import path from 'path';
-import webdavClient from 'webdav';
 
 import ItemList from '../components/ItemList';
 import HeaderBar from '../components/HeaderBar';
 
 
-async function loadFiles(client, path) {
-	return (await client.getDirectoryContents(path)).map(x => Object.assign(x, {
-		mime: x.type === 'directory' ? 'text/directory' : (x.mime || mime.getType(x.basename) || 'application/octet-stream'),
-		downloadLink: x.type === 'directory' ? '' : client.getFileDownloadLink(x.filename),
-	})).sort((x, y) => {
-		if (x.basename < y.basename) {
-			return -1;
-		} else if (x.basename > y.basename) {
-			return 1;
-		} else {
-			return 0;
-		}
-	});
-}
-
-
 export default {
 	components: {ItemList, HeaderBar},
-	async asyncData({params, env, redirect, error}) {
-		const client = webdavClient(env.webdavEndpoint);
-
+	async fetch({store, params, error, redirect}) {
 		const path = '/' + (params.path || '');
-		let files = [];
+		const stat = await store.dispatch('path/stat', path);
 
-		const stat = await client.stat(path);
 		if (stat.type === 'directory') {
-			return {
-				path: path,
-				files: await loadFiles(client, path),
-				endpoint: env.webdavEndpoint
-			};
-		} else if (stat.lastmod === undefined) {
-			error({statusCode: 404, message: 'No such file or directory'});
+			await store.dispatch('path/changeDir', path);
+		} else if (stat.lastmod !== undefined) {
+			redirect(await store.dispatch('path/downloadLink', path));
 		} else {
-			redirect(client.getFileDownloadLink(path));
+			error({statusCode: 404, message: 'No such file or directory'});
 		}
 	},
 	head() {
@@ -83,7 +58,7 @@ export default {
 	},
 	methods: {
 		upload(file, data, target) {
-			const filename = path.join(target ? target.filename : this.path, file.name);
+			const filename = path.join(target ? target.filename : this.$store.state.path, file.name);
 			this.client.putFileContents(filename, data, {format: 'binary'})
 				.then(() => this.reload());
 		},
@@ -99,7 +74,7 @@ export default {
 			}
 		},
 		async reload() {
-			this.files = await loadFiles(this.client, this.path);
+			await this.$store.dispatch('path/reload');
 		},
 	},
 };
