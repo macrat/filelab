@@ -6,6 +6,7 @@ import webdavClient from 'webdav';
 export const state = () => ({
 	path: '',
 	files: [],
+	dragging: null,
 	endpoint: null,
 });
 
@@ -24,6 +25,12 @@ export const mutations = {
 	'path/changeDir': function(state, {path, files}) {
 		state.path = path;
 		state.files = files;
+	},
+	'dragging/set': function(state, file) {
+		state.dragging = file;
+	},
+	'dragging/unset': function(state) {
+		state.dragging = null;
 	},
 };
 

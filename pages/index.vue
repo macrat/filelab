@@ -56,7 +56,7 @@ export default {
 			await this.reload();
 		},
 		async moveToParent(target) {
-			const file = this.$refs.itemlist.dragging;
+			const file = this.$store.state.dragging;
 			if (file) {
 				await this.$store.dispatch('file/move', {file, target});
 				await this.reload();

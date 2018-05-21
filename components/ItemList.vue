@@ -18,9 +18,9 @@ li {
 		<li v-for="file in $store.state.files">
 			<item-button
 				:file=file
-				:disabled="file.type !== 'directory' && dragging"
+				:disabled="file.type !== 'directory' && $store.state.dragging"
 				@dragstart=dragstart
-				@dragend="dragging = null" />
+				@dragend="$store.commit('dragging/unset')" />
 		</li>
 	</ul>
 </template>
@@ -31,11 +31,8 @@ import ItemButton from '../components/ItemButton';
 
 export default {
 	components: {ItemButton},
-	data() {
-		return {dragging: null};
-	},
 	watch: {
-		dragging(value) {
+		'$store.state.dragging': function(value) {
 			if (!value) {
 				this.$children.forEach(x => {
 					if (x.dragleave) {
@@ -52,7 +49,7 @@ export default {
 			return false;
 		},
 		dragstart(ev, item) {
-			this.dragging = item.file;
+			this.$store.commit('dragging/set', item.file);
 		},
 		drop(ev) {
 			const target = JSON.parse(ev.target && ev.target.dataset.file || ev.target.parentElement && ev.target.parentElement.dataset.file || 'null');
@@ -67,15 +64,15 @@ export default {
 					reader.readAsArrayBuffer(files[i]);
 				}
 
-				this.dragging = null;
+				this.$store.commit('dragging/unset');
 				return false;
 			}
 
 			if (target) {
-				if (this.dragging.filename !== target.filename) {
-					this.$emit('move', this.dragging, target);
+				if (this.$store.state.dragging.filename !== target.filename) {
+					this.$emit('move', this.$store.state.dragging, target);
 				}
-				this.dragging = null;
+				this.$store.commit('dragging/unset');
 				return false;
 			}
 		},
