@@ -12,22 +12,17 @@ div {
 
 <template>
 	<div>
-		<header-bar
-			:path=$store.state.path
-			@move-to-parent=moveToParent />
+		<header-bar @move-to-parent=moveToParent />
 
 		<item-list
 			id=itemlist
 			ref=itemlist
-			:files=$store.state.files
 			@upload=upload
 			@move=move />
 	</div>
 </template>
 
 <script>
-import path from 'path';
-
 import ItemList from '../components/ItemList';
 import HeaderBar from '../components/HeaderBar';
 

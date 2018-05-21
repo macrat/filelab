@@ -15,7 +15,7 @@ li {
 
 <template>
 	<ul @dragover.prevent=dragover @drop.prevent=drop>
-		<li v-for="file in files">
+		<li v-for="file in $store.state.files">
 			<item-button
 				:file=file
 				:disabled="file.type !== 'directory' && dragging"
@@ -30,7 +30,6 @@ import ItemButton from '../components/ItemButton';
 
 
 export default {
-	props: ['files'],
 	components: {ItemButton},
 	data() {
 		return {dragging: null};

@@ -36,7 +36,7 @@ img {
 		<li v-for="bread in breadList">
 			<nuxt-link
 				:to=bread.filename
-				:class="{current: bread.filename === path}"
+				:class="{current: bread.filename === $store.state.path}"
 				@dragover.native.prevent="dragover($event, bread)"
 				@drop.native.prevent="drop($event, bread)"
 				draggable=false>
@@ -54,16 +54,15 @@ img {
 
 <script>
 export default {
-	props: ['path'],
 	computed: {
 		breadList() {
-			if (this.path === '/') {
+			if (this.$store.state.path === '/') {
 				return [{basename: '/', filename: '/'}];
 			}
 
 			const result = [{basename: '/', filename: ''}];
 
-			const items = this.path.slice(1).split('/');
+			const items = this.$store.state.path.slice(1).split('/');
 			for (let i=0; i<items.length; i++) {
 				result.push({
 					basename: items[i],
@@ -77,7 +76,7 @@ export default {
 	},
 	methods: {
 		dragover(ev, dir) {
-			if (this.path !== dir.path) {
+			if (this.$store.state.path !== dir.path) {
 				ev.dataTransfer.dropEffect = 'move';
 
 				return false;
@@ -88,7 +87,7 @@ export default {
 			}
 		},
 		drop(ev, dir) {
-			if (this.path !== dir.filename) {
+			if (this.$store.state.path !== dir.filename) {
 				this.$emit('move-to-parent', dir);
 				return false;
 			}
