@@ -59,18 +59,22 @@ export default {
 				for (let i=0; i<files.length; i++) {
 					const reader = new FileReader();
 					reader.onload = data => {
-						this.$emit('upload', files[i], data.target.result, target);
+						this.$store.dispatch('file/upload', {
+							file: files[i],
+							data: data.target.result,
+							target: target,
+						});
 					};
 					reader.readAsArrayBuffer(files[i]);
 				}
-
 				this.$store.commit('dragging/unset');
 				return false;
 			}
 
 			if (target) {
-				if (this.$store.state.dragging.filename !== target.filename) {
-					this.$emit('move', this.$store.state.dragging, target);
+				const file = this.$store.state.dragging;
+				if (file && file.filename !== target.filename) {
+					this.$store.dispatch('file/move', {file, target});
 				}
 				this.$store.commit('dragging/unset');
 				return false;

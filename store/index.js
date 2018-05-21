@@ -60,15 +60,19 @@ export const actions = {
 	'path/reload': function({dispatch, state}) {
 		dispatch('path/changeDir', state.path);
 	},
-	'file/upload': function({state, getters}, {file, data, target}) {
-		return getters.client.putFileContents(
+	'file/upload': async function({state, getters, dispatch}, {file, data, target}) {
+		await getters.client.putFileContents(
 			path.join(target ? target.filename : state.path, file.name),
 			data,
 			{format: 'binary'},
 		);
+
+		await dispatch('path/reload');
 	},
-	'file/move': function({getters}, {file, target}) {
-		return getters.client.moveFile(file.filename, path.join(target.filename, file.basename))
+	'file/move': async function({getters, dispatch}, {file, target}) {
+		await getters.client.moveFile(file.filename, path.join(target.filename, file.basename))
+
+		await dispatch('path/reload');
 	},
 	nuxtServerInit({commit, dispatch}, {env}) {
 		commit('endpoint/set', env.webdavEndpoint);

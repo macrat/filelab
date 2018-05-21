@@ -12,13 +12,9 @@ div {
 
 <template>
 	<div>
-		<header-bar @move-to-parent=moveToParent />
+		<header-bar />
 
-		<item-list
-			id=itemlist
-			ref=itemlist
-			@upload=upload
-			@move=move />
+		<item-list />
 	</div>
 </template>
 
@@ -45,26 +41,6 @@ export default {
 		return {
 			title: '/' + (this.$route.params.path || '') + ' - FileLab',
 		};
-	},
-	methods: {
-		async upload(file, data, target) {
-			await this.$store.dispatch('file/upload', {file, data, target});
-			await this.reload();
-		},
-		async move(file, target) {
-			await this.$store.dispatch('file/move', {file, target});
-			await this.reload();
-		},
-		async moveToParent(target) {
-			const file = this.$store.state.dragging;
-			if (file) {
-				await this.$store.dispatch('file/move', {file, target});
-				await this.reload();
-			}
-		},
-		async reload() {
-			await this.$store.dispatch('path/reload');
-		},
 	},
 };
 </script>

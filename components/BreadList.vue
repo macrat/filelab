@@ -88,7 +88,13 @@ export default {
 		},
 		drop(ev, dir) {
 			if (this.$store.state.path !== dir.filename) {
-				this.$emit('move-to-parent', dir);
+				const file = this.$store.state.dragging;
+				if (file) {
+					this.$store.dispatch('file/move', {
+						file: file,
+						target: dir,
+					});
+				}
 				return false;
 			}
 		},

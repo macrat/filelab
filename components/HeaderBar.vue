@@ -6,7 +6,7 @@ header {
 
 <template>
 	<header>
-		<bread-list :path=path @move-to-parent="x => $emit('move-to-parent', x)" />
+		<bread-list />
 	</header>
 </template>
 
@@ -15,7 +15,6 @@ import BreadList from './BreadList';
 
 
 export default {
-	props: ['path'],
 	components: {BreadList},
 };
 </script>
