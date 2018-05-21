@@ -51,26 +51,20 @@ export default {
 			title: '/' + (this.$route.params.path || '') + ' - FileLab',
 		};
 	},
-	computed: {
-		client() {
-			return webdavClient(this.endpoint);
-		},
-	},
 	methods: {
-		upload(file, data, target) {
-			const filename = path.join(target ? target.filename : this.$store.state.path, file.name);
-			this.client.putFileContents(filename, data, {format: 'binary'})
-				.then(() => this.reload());
+		async upload(file, data, target) {
+			await this.$store.dispatch('file/upload', {file, data, target});
+			await this.reload();
 		},
-		move(file, target) {
-			this.client.moveFile(file.filename, path.join(target.filename, file.basename))
-				.then(() => this.reload());
+		async move(file, target) {
+			await this.$store.dispatch('file/move', {file, target});
+			await this.reload();
 		},
-		moveToParent(target) {
+		async moveToParent(target) {
 			const file = this.$refs.itemlist.dragging;
 			if (file) {
-				this.client.moveFile(file.filename, path.join(target.path, file.basename))
-					.then(() => this.reload());
+				await this.$store.dispatch('file/move', {file, target});
+				await this.reload();
 			}
 		},
 		async reload() {

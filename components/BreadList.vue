@@ -35,8 +35,8 @@ img {
 	<ul>
 		<li v-for="bread in breadList">
 			<nuxt-link
-				:to=bread.path
-				:class="{current: bread.path === path}"
+				:to=bread.filename
+				:class="{current: bread.filename === path}"
 				@dragover.native.prevent="dragover($event, bread)"
 				@drop.native.prevent="drop($event, bread)"
 				draggable=false>
@@ -44,9 +44,9 @@ img {
 				<img
 					src="~~/node_modules/material-design-icons/action/svg/production/ic_home_24px.svg"
 					draggable=false
-					v-if="bread.path === '/'">
+					v-if="bread.filename === '/'">
 
-				<span v-else>{{ bread.name }}</span>
+				<span v-else>{{ bread.basename }}</span>
 			</nuxt-link>
 		</li>
 	</ul>
@@ -58,19 +58,19 @@ export default {
 	computed: {
 		breadList() {
 			if (this.path === '/') {
-				return [{name: '/', path: '/'}];
+				return [{basename: '/', filename: '/'}];
 			}
 
-			const result = [{name: '/', path: ''}];
+			const result = [{basename: '/', filename: ''}];
 
 			const items = this.path.slice(1).split('/');
 			for (let i=0; i<items.length; i++) {
 				result.push({
-					name: items[i],
-					path: result[i].path + '/' + items[i],
+					basename: items[i],
+					filename: result[i].filename + '/' + items[i],
 				});
 			}
-			result[0].path = '/';
+			result[0].filename = '/';
 
 			return result;
 		},
@@ -88,7 +88,7 @@ export default {
 			}
 		},
 		drop(ev, dir) {
-			if (this.path !== dir.path) {
+			if (this.path !== dir.filename) {
 				this.$emit('move-to-parent', dir);
 				return false;
 			}
