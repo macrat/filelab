@@ -11,7 +11,7 @@ div {
 </style>
 
 <template>
-	<RequiredLogin>
+	<RequiredLogin @loggedin=loggedin>
 		<div>
 			<header-bar />
 
@@ -29,11 +29,14 @@ import RequiredLogin from '~/components/RequiredLogin';
 export default {
 	components: {ItemList, HeaderBar, RequiredLogin},
 	async fetch({store, params, error, redirect}) {
+		const path = '/' + (params.path || '');
+
+		store.commit('path/set', path);
+
 		if (!store.getters.loggedin) {
 			return;
 		}
 
-		const path = '/' + (params.path || '');
 		const stat = await store.dispatch('path/stat', path);
 
 		if (stat.type === 'directory') {
@@ -48,6 +51,20 @@ export default {
 		return {
 			title: '/' + (this.$route.params.path || '') + ' - FileLab',
 		};
+	},
+	methods: {
+		async loggedin() {
+			const path = '/' + (this.$route.params.path || '');
+			const stat = await this.$store.dispatch('path/stat', path);
+
+			if (stat.type === 'directory') {
+				await this.$store.dispatch('path/changeDir', path);
+			} else if (this.$stat.lastmod !== undefined) {
+				location.href = await this.$store.dispatch('path/downloadLink', path);
+			} else {
+				this.$nuxt.error({statusCode: 404, message: 'No such file or directory'});
+			}
+		},
 	},
 };
 </script>

@@ -32,6 +32,9 @@ export const mutations = {
 	'user/logout': function(state) {
 		state.user = {name: null, password: null};
 	},
+	'path/set': function(state, path) {
+		state.path = path;
+	},
 	'path/changeDir': function(state, {path, files}) {
 		state.path = path;
 		state.files = files;
@@ -49,7 +52,9 @@ export const actions = {
 	'user/login': async function({state, commit}, {name, password}) {
 		console.log(name, password);
 		const client = webdavClient(state.endpoint, name, password);
-		if (await client.getQuota() === null) {
+		try {
+			await client.getQuota();
+		} catch(e) {
 			throw new Error('incorrect username or password');
 		}
 		commit('user/login', {name, password});

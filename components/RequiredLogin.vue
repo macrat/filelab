@@ -75,6 +75,7 @@ export default {
 		},
 		login() {
 			this.$store.dispatch('user/login', this.user)
+				.then(() => this.$emit('loggedin'))
 				.catch(e => this.error = e);
 		},
 	},
