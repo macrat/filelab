@@ -11,21 +11,28 @@ div {
 </style>
 
 <template>
-	<div>
-		<header-bar />
+	<RequiredLogin>
+		<div>
+			<header-bar />
 
-		<item-list />
-	</div>
+			<item-list />
+		</div>
+	</RequiredLogin>
 </template>
 
 <script>
-import ItemList from '../components/ItemList';
-import HeaderBar from '../components/HeaderBar';
+import ItemList from '~/components/ItemList';
+import HeaderBar from '~/components/HeaderBar';
+import RequiredLogin from '~/components/RequiredLogin';
 
 
 export default {
-	components: {ItemList, HeaderBar},
+	components: {ItemList, HeaderBar, RequiredLogin},
 	async fetch({store, params, error, redirect}) {
+		if (!store.getters.loggedin) {
+			return;
+		}
+
 		const path = '/' + (params.path || '');
 		const stat = await store.dispatch('path/stat', path);
 

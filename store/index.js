@@ -8,12 +8,16 @@ export const state = () => ({
 	files: [],
 	dragging: null,
 	endpoint: null,
+	user: {name: null, password: null},
 });
 
 
 export const getters = {
 	client(state) {
-		return webdavClient(state.endpoint);
+		return webdavClient(state.endpoint, state.user.name, state.user.password);
+	},
+	loggedin(state) {
+		return state.user.name !== null && state.user.password !== null;
 	},
 };
 
@@ -21,6 +25,12 @@ export const getters = {
 export const mutations = {
 	'endpoint/set': function(state, endpoint) {
 		state.endpoint = endpoint;
+	},
+	'user/login': function(state, {name, password}) {
+		state.user = {name, password};
+	},
+	'user/logout': function(state) {
+		state.user = {name: null, password: null};
 	},
 	'path/changeDir': function(state, {path, files}) {
 		state.path = path;
@@ -36,6 +46,16 @@ export const mutations = {
 
 
 export const actions = {
+	'user/login': async function({state, commit}, {name, password}) {
+		console.log(name, password);
+		const client = webdavClient(state.endpoint, name, password);
+		if (await client.getQuota() === null) {
+			throw new Error('incorrect username or password');
+		}
+		commit('user/login', {name, password});
+		console.log(`logged in as ${name}`);
+		return null;
+	},
 	'path/stat': async function({getters}, path) {
 		return await getters.client.stat(path);
 	},
