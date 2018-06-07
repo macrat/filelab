@@ -50,7 +50,6 @@ export const mutations = {
 
 export const actions = {
 	'user/login': async function({state, commit}, {name, password}) {
-		console.log(name, password);
 		const client = webdavClient(state.endpoint, name, password);
 		try {
 			await client.getQuota();
@@ -58,7 +57,6 @@ export const actions = {
 			throw new Error('incorrect username or password');
 		}
 		commit('user/login', {name, password});
-		console.log(`logged in as ${name}`);
 		return null;
 	},
 	'path/stat': async function({getters}, path) {
