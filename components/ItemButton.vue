@@ -73,7 +73,7 @@ span {
 			@dragend=dragend>
 
 		<img class=icon :src=icon v-if=!thumbnailLoaded />
-		<img class=thumbnail :src=thumbnailURL v-show=thumbnailLoaded @load="thumbnailLoaded = true" />
+		<img class=thumbnail :src=thumbnailURL crossorigin=anonymous v-show=thumbnailLoaded @load="thumbnailLoaded = true" />
 		<span>{{ file.basename }}</span>
 	</a>
 </template>
