@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "npx nuxt",
+    "dev:docker": "npm install && HOST=0.0.0.0 npx nuxt",
     "start": "npx nuxt build && npx nuxt start"
   },
   "author": "MacRat <m@crat.jp> (https://blanktar.jp)",
