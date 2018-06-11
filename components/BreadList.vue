@@ -36,7 +36,7 @@ img {
 		<li v-for="bread in breadList">
 			<nuxt-link
 				:to=bread.filename
-				:class="{current: bread.filename === $store.state.path}"
+				:class="{current: bread.current}"
 				@dragover.native.prevent="dragover($event, bread)"
 				@drop.native.prevent="drop($event, bread)"
 				draggable=false>
@@ -44,7 +44,7 @@ img {
 				<img
 					src="~~/node_modules/material-design-icons/action/svg/production/ic_home_24px.svg"
 					draggable=false
-					v-if="bread.filename === '/'">
+					v-if="bread.basename === '/'">
 
 				<span v-else>{{ bread.basename }}</span>
 			</nuxt-link>
@@ -56,20 +56,20 @@ img {
 export default {
 	computed: {
 		breadList() {
-			if (this.$store.state.path === '/') {
-				return [{basename: '/', filename: '/'}];
-			}
+			const result = [{basename: '/', filename: '/' + encodeURIComponent(this.$store.state.endpoint), current: this.$store.state.path === '/'}];
 
-			const result = [{basename: '/', filename: ''}];
+			if (this.$store.state.path === '/') {
+				return result;
+			}
 
 			const items = this.$store.state.path.slice(1).split('/');
 			for (let i=0; i<items.length; i++) {
 				result.push({
 					basename: items[i],
 					filename: result[i].filename + '/' + items[i],
+					current: i+1 === items.length,
 				});
 			}
-			result[0].filename = '/';
 
 			return result;
 		},

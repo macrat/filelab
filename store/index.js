@@ -65,10 +65,11 @@ export const actions = {
 	'path/downloadLink': async function({getters}, path) {
 		return await getters.client.getFileDownloadLink(path);
 	},
-	'path/changeDir': async function({getters, commit}, path) {
+	'path/changeDir': async function({state, getters, commit}, path) {
 		const files = (await getters.client.getDirectoryContents(path)).map(x => Object.assign(x, {
 			mime: x.type === 'directory' ? 'text/directory' : (x.mime || mime.getType(x.basename) || 'application/octet-stream'),
 			downloadLink: x.type === 'directory' ? '' : getters.client.getFileDownloadLink(x.filename),
+			accessPath: `/${encodeURIComponent(state.endpoint)}${x.filename}`,
 		})).sort((x, y) => {
 			if (x.basename < y.basename) {
 				return -1;

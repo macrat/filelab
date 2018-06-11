@@ -47,7 +47,7 @@ span {
 <template>
 	<nuxt-link
 			v-if="file.type === 'directory'"
-			:to=file.filename
+			:to=file.accessPath
 			:class="{dragging: dragging, draghover: draghover, disabled: !dragging && disabled}"
 			:data-file="JSON.stringify(file)"
 			draggable=true
