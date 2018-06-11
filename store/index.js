@@ -97,7 +97,4 @@ export const actions = {
 
 		await dispatch('path/reload');
 	},
-	nuxtServerInit({commit, dispatch}, {env}) {
-		commit('endpoint/set', env.webdavEndpoint);
-	},
 };

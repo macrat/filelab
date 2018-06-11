@@ -1,69 +1,78 @@
 <style scoped>
-div {
+.login {
 	display: flex;
-	flex-direction: column;
-	height: 100vh;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	justify-content: center;
+	align-items: center;
 }
 
-#itemlist {
-	flex: 1 1 0;
+.login div {
+	display: flex;
+	flex-direction: column;
+	padding: 1em;
+	width: 20em;
+}
+
+input {
+	display: block;
+	font-size: 120%;
+	outline: none;
+	border: none;
+	background-color: #f0f0f0;
+	margin: 4px;
+	padding: 8px;
+}
+input[type=submit] {
+	align-self: flex-end;
+}
+span {
+	color: red;
 }
 </style>
 
 <template>
-	<RequiredLogin @loggedin=loggedin>
+	<div class=login>
 		<div>
-			<header-bar />
-
-			<item-list />
+			<input placeholder="server address" v-model=host autofocus @keydown.enter=focusname>
+			<input placeholder="user name" v-model=username ref=username @keydown.enter=focuspass>
+			<input placeholder="password" v-model=password type=password ref=password @keydown.enter=login>
+			<span v-if=error>{{ error.message }}</span>
+			<input type=submit value=login @click=login>
 		</div>
-	</RequiredLogin>
+	</div>
 </template>
 
 <script>
-import ItemList from '~/components/ItemList';
-import HeaderBar from '~/components/HeaderBar';
-import RequiredLogin from '~/components/RequiredLogin';
-
-
 export default {
-	components: {ItemList, HeaderBar, RequiredLogin},
-	async fetch({store, params, error, redirect}) {
-		const path = '/' + (params.path || '');
-
-		store.commit('path/set', path);
-
-		if (!store.getters.loggedin) {
-			return;
-		}
-
-		const stat = await store.dispatch('path/stat', path);
-
-		if (stat.type === 'directory') {
-			await store.dispatch('path/changeDir', path);
-		} else if (stat.lastmod !== undefined) {
-			redirect(await store.dispatch('path/downloadLink', path));
-		} else {
-			error({statusCode: 404, message: 'No such file or directory'});
-		}
+	data() {
+		return {
+			host: 'http://localhost:3001',
+			username: '',
+			password: '',
+			error: null,
+		};
 	},
 	head() {
 		return {
-			title: '/' + (this.$route.params.path || '') + ' - FileLab',
+			title: 'FileLab',
 		};
 	},
 	methods: {
-		async loggedin() {
-			const path = '/' + (this.$route.params.path || '');
-			const stat = await this.$store.dispatch('path/stat', path);
-
-			if (stat.type === 'directory') {
-				await this.$store.dispatch('path/changeDir', path);
-			} else if (this.$stat.lastmod !== undefined) {
-				location.href = await this.$store.dispatch('path/downloadLink', path);
-			} else {
-				this.$nuxt.error({statusCode: 404, message: 'No such file or directory'});
-			}
+		focusname() {
+			this.$refs.username.focus();
+		},
+		focuspass() {
+			this.$refs.password.focus();
+		},
+		login() {
+			this.$store.commit('endpoint/set', this.host);
+			this.$store.dispatch('user/login', {name: this.username, password: this.password})
+				.then(() => this.$router.push('/' + encodeURIComponent(this.host) + '/'))
+				.catch(e => this.error = e);
 		},
 	},
 };
