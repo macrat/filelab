@@ -1,4 +1,17 @@
 <style scoped>
+header {
+	display: flex;
+	flex-direction: row;
+	background-color: #404040;
+}
+
+header a {
+	color: #d0d0d0;
+	text-decoration: none;
+	margin: 6px 1px 0;
+	padding: 4px 8px;
+}
+
 .login {
 	display: flex;
 	position: fixed;
@@ -35,13 +48,19 @@ span {
 </style>
 
 <template>
-	<div class=login>
-		<div>
-			<input placeholder="server address" v-model=host autofocus @keydown.enter=focusname>
-			<input placeholder="user name" v-model=username ref=username @keydown.enter=focuspass>
-			<input placeholder="password" v-model=password type=password ref=password @keydown.enter=login>
-			<span v-if=error>{{ error.message }}</span>
-			<input type=submit value=login @click=login>
+	<div>
+		<header>
+			<nuxt-link to=/>FileLab</nuxt-link>
+		</header>
+
+		<div class=login>
+			<div>
+				<input placeholder="server address" v-model=host autofocus @keydown.enter=focusname>
+				<input placeholder="user name" v-model=username ref=username @keydown.enter=focuspass>
+				<input placeholder="password" v-model=password type=password ref=password @keydown.enter=login>
+				<span v-if=error>{{ error.message }}</span>
+				<input type=submit value=login @click=login>
+			</div>
 		</div>
 	</div>
 </template>
