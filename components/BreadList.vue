@@ -43,7 +43,7 @@ img {
 	<ul>
 		<li v-for="bread in breadList">
 			<nuxt-link
-				:to=bread.filename
+				:to=bread.accessPath
 				:class="{current: bread.current}"
 				@dragover.native.prevent="dragover($event, bread)"
 				@drop.native.prevent="drop($event, bread)"
@@ -64,7 +64,12 @@ img {
 export default {
 	computed: {
 		breadList() {
-			const result = [{basename: '/', filename: '/' + encodeURIComponent(this.$store.state.endpoint), current: this.$store.state.path === '/'}];
+			const result = [{
+				basename: '/',
+				filename: '',
+				accessPath: '/' + encodeURIComponent(this.$store.state.endpoint),
+				current: this.$store.state.path === '/',
+			}];
 
 			if (this.$store.state.path === '/') {
 				return result;
@@ -75,6 +80,7 @@ export default {
 				result.push({
 					basename: items[i],
 					filename: result[i].filename + '/' + items[i],
+					accessPath: result[i].accessPath + '/' + items[i],
 					current: i+1 === items.length,
 				});
 			}
