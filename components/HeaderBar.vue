@@ -1,5 +1,6 @@
 <style scoped>
 header {
+	flex-shrink: 0;
 	display: flex;
 	flex-direction: row;
 	background-color: #404040;
