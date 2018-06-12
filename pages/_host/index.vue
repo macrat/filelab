@@ -13,7 +13,9 @@ div {
 <template>
 	<RequiredLogin @loggedin=loggedin>
 		<div>
-			<header-bar />
+			<header-bar>
+				<bread-list />
+			</header-bar>
 
 			<item-list />
 		</div>
@@ -23,11 +25,12 @@ div {
 <script>
 import ItemList from '~/components/ItemList';
 import HeaderBar from '~/components/HeaderBar';
+import BreadList from '~/components/BreadList';
 import RequiredLogin from '~/components/RequiredLogin';
 
 
 export default {
-	components: {ItemList, HeaderBar, RequiredLogin},
+	components: {ItemList, HeaderBar, BreadList, RequiredLogin},
 	async fetch({store, params, error, redirect}) {
 		const path = '/' + (params.path || '');
 

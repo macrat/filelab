@@ -19,6 +19,14 @@ a {
 	background-color: #d0d0d0;
 	color: #404040;
 	text-decoration: none;
+
+	outline: none;
+	position: relative;
+	top: 0;
+	transition: top .2s ease;
+}
+a:focus {
+	top: -4px;
 }
 
 img {

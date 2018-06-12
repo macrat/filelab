@@ -15,16 +15,8 @@ a {
 
 <template>
 	<header>
-		<nuxt-link to=/>FileLab</nuxt-link>
-		<bread-list />
+		<nuxt-link to=/ tabindex=-1>FileLab</nuxt-link>
+
+		<slot />
 	</header>
 </template>
-
-<script>
-import BreadList from './BreadList';
-
-
-export default {
-	components: {BreadList},
-};
-</script>

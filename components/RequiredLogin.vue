@@ -32,6 +32,10 @@ input {
 	background-color: #f0f0f0;
 	margin: 4px;
 	padding: 8px;
+	transition: outline .1s;
+}
+input:focus {
+	outline: 2px solid black;
 }
 input[type=submit] {
 	align-self: flex-end;

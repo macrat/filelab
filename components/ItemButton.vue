@@ -10,6 +10,11 @@ a {
 	transition: .2s transform, .2s opacity;
 }
 
+a:focus {
+	outline: none;
+	background-color: #e0e0e0;
+}
+
 a.dragging {
 	opacity: .8;
 	transform: scale(.8, .8);

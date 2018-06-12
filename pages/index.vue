@@ -1,17 +1,4 @@
 <style scoped>
-header {
-	display: flex;
-	flex-direction: row;
-	background-color: #404040;
-}
-
-header a {
-	color: #d0d0d0;
-	text-decoration: none;
-	margin: 6px 1px 0;
-	padding: 4px 8px;
-}
-
 .login {
 	display: flex;
 	position: fixed;
@@ -38,6 +25,10 @@ input {
 	background-color: #f0f0f0;
 	margin: 4px;
 	padding: 8px;
+	transition: outline .1s;
+}
+input:focus {
+	outline: 2px solid black;
 }
 input[type=submit] {
 	align-self: flex-end;
@@ -49,9 +40,7 @@ span {
 
 <template>
 	<div>
-		<header>
-			<nuxt-link to=/>FileLab</nuxt-link>
-		</header>
+		<header-bar />
 
 		<div class=login>
 			<div>
@@ -66,7 +55,11 @@ span {
 </template>
 
 <script>
+import HeaderBar from '~/components/HeaderBar';
+
+
 export default {
+	components: {HeaderBar},
 	data() {
 		return {
 			host: 'http://localhost:3001',
