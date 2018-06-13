@@ -62,7 +62,7 @@ span {
 			@dragover.native.prevent=dragover
 			@drop.native.prevent=drop>
 
-		<img class=icon :src=icon />
+		<img class=icon :src=icon alt="" decode=async />
 		<span>{{ file.basename }}</span>
 	</nuxt-link>
 
@@ -77,8 +77,8 @@ span {
 			@dragstart=dragstart
 			@dragend=dragend>
 
-		<img class=icon :src=icon v-if=!thumbnailLoaded />
-		<img class=thumbnail :src=thumbnailURL crossorigin=anonymous v-show=thumbnailLoaded @load="thumbnailLoaded = true" />
+		<img class=icon :src=icon alt="" decode=async v-if=!thumbnailLoaded />
+		<img class=thumbnail :src=thumbnailURL alt="" decode=async crossorigin=use-credentials v-show=thumbnailLoaded @load="thumbnailLoaded = true" />
 		<span>{{ file.basename }}</span>
 	</a>
 </template>
