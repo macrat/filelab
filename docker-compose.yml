@@ -10,6 +10,7 @@ services:
       - ./components:/home/node/app/components:ro
       - ./layouts:/home/node/app/layouts:ro
       - ./pages:/home/node/app/pages:ro
+      - ./plugins:/home/node/app/plugins:ro
       - ./store:/home/node/app/store:ro
       - ./nuxt.config.js:/home/node/app/nuxt.config.js:ro
       - ./package.json:/home/node/app/package.json:ro

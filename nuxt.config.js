@@ -5,6 +5,9 @@ module.exports = {
 	loading: {
 		color: '#fafafa',
 	},
+	plugins: [
+		'~plugins/autofocus.js',
+	],
 	head: {
 		meta: [{
 			charset: 'utf-8',

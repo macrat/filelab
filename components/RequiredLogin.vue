@@ -49,7 +49,7 @@ span {
 	<div :class="{ 'need-login': !$store.getters.loggedin }">
 		<div class=login-form v-if="!$store.getters.loggedin">
 			<div>
-				<input placeholder="user name" autofocus v-model=user.name @keydown.enter=nextfocus>
+				<input placeholder="user name" v-autofocus v-model=user.name @keydown.enter=nextfocus>
 				<input placeholder="password" ref=password type=password v-model=user.password @keydown.enter=login>
 				<span v-if=error>{{ error.message }}</span>
 				<input type=submit value=login @click=login>
