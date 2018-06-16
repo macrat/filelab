@@ -62,7 +62,7 @@ export default {
 	components: {HeaderBar},
 	data() {
 		return {
-			host: 'http://localhost:3001',
+			host: process.env.webdavEndpoint,
 			username: '',
 			password: '',
 			error: null,
