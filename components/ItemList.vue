@@ -14,23 +14,31 @@ li {
 </style>
 
 <template>
-	<ul @dragover.prevent=dragover @drop.prevent=drop>
-		<li v-for="file in $store.state.files">
-			<item-button
-				:file=file
-				:disabled="file.type !== 'directory' && $store.state.dragging"
-				@dragstart=dragstart
-				@dragend="$store.commit('dragging/unset')" />
-		</li>
-	</ul>
+    <div @contextmenu.prevent=$refs.menu.open>
+        <ul @dragover.prevent=dragover @drop.prevent=drop>
+            <li v-for="file in $store.state.files">
+                <item-button
+                    :file=file
+                    :disabled="file.type !== 'directory' && $store.state.dragging"
+                    @dragstart=dragstart
+                    @dragend="$store.commit('dragging/unset')" />
+            </li>
+        </ul>
+
+        <context-menu ref=menu>
+            <div>hello</div>
+            <div>world</div>
+        </context-menu>
+    </div>
 </template>
 
 <script>
-import ItemButton from '../components/ItemButton';
+import ItemButton from './ItemButton';
+import ContextMenu from './ContextMenu';
 
 
 export default {
-	components: {ItemButton},
+	components: {ItemButton, ContextMenu},
 	watch: {
 		'$store.state.dragging': function(value) {
 			if (!value) {

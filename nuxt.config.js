@@ -13,4 +13,9 @@ module.exports = {
 			content: 'width=device-width,initial-scale=1',
 		}],
 	},
+	watchers: {
+		webpack: {
+			pool: 1000,
+		},
+	},
 }
