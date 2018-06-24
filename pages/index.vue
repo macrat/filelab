@@ -44,8 +44,8 @@ span {
 
 		<div class=login>
 			<div>
-				<input placeholder="server address" v-model=host autofocus @keydown.enter=focusname>
-				<input placeholder="user name" v-model=username ref=username @keydown.enter=focuspass>
+				<input placeholder="server address" v-model=host @keydown.enter=focusname>
+				<input placeholder="user name" v-model=username v-autofocus ref=username @keydown.enter=focuspass>
 				<input placeholder="password" v-model=password type=password ref=password @keydown.enter=login>
 				<span v-if=error>{{ error.message }}</span>
 				<input type=submit value=login @click=login>
@@ -62,7 +62,7 @@ export default {
 	components: {HeaderBar},
 	data() {
 		return {
-			host: 'http://localhost:3001',
+			host: process.env.webdavEndpoint,
 			username: '',
 			password: '',
 			error: null,
